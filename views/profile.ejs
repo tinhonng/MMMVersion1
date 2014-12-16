@@ -1,0 +1,309 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=480">
+
+    <title>Make Me Mobile Diagnostics</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+    <link href="/stylesheets/bootstrap-datetimepicker.css" rel="stylesheet" media="screen">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+
+    <link rel="stylesheet" href="/stylesheets/style.css">
+
+    <link rel="icon" type="image/png" href="http://taminder.net/img/favicon.png">
+
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        })
+    </script>
+</head>
+<body>
+<nav class="navbar navbar-default" role="navigation" style="position: static;">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">
+                <img src="/images/logo.png" alt="Make Me Mobile Diagnostics">
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li id="logout"><a href="/authenticate/logout">Log Out</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+
+<div id="page" style="min-height: 75%">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">User Profile</h2>
+                    </div>
+                    <div class="panel-body">
+                        <form id='codeform' target="hidden-iframe" action="/owner/upload" enctype="multipart/form-data" method="post" class="row">
+                            <div class="col-sm-3">
+                                <img id="profilePic" src="/<%= user.sign_up_email%>.jpg" class="img-rounded img-responsive" style="margin: 0 auto;">
+                            </div>
+
+                            <div class="col-sm-9">
+                                <h3><span id="sign_up_last_name" data-sign_up_last_name="<%=user.sign_up_last_name%>"><%= user.sign_up_last_name%></span>, <span id="sign_up_first_name" data-sign_up_first_name="<%=user.sign_up_first_name%>"><%= user.sign_up_first_name%></span></h3>
+                                <p>
+                                    <span id="sign_up_gender" data-sign_up_gender="<%=user.sign_up_gender%>"><%= user.sign_up_gender %></span>
+                                    <br>
+                                    <span id="sign_up_birthday" ><%= user.sign_up_birthday_month%> /<%= user.sign_up_birthday_day%> /<%= user.sign_up_birthday_year%></span>
+                                    <br>
+                                    <span id="sign_up_email" data-sign_up_email="<%= user.sign_up_email%>"><%= user.sign_up_email%></span>
+
+                                </p>
+                            </div>
+                            <input name="upload" type="file" id="file" style="visibility: hidden;height:0;width:0;border:0; "/>
+                            <input id="submit_btn" type="submit" style="visibility: hidden;height:0;width:0;border:0;"/>
+                        </form>
+                        <iframe name="hidden-iframe" style="visibility: hidden;height:0;width:0;border:0;" ></iframe>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">Appointments</h2>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-xs-10 col-xs-push-1">
+
+                               <form id="date_form" action="" class="form-horizontal" style="<% if(appointment_info.message === "success" || appointment_info.info && appointment_info.info.status === "success") { %> display: none<% } %>" role="form">
+                                    <div class="form-group">
+                                        <label for="dtp_input1" class="col-md-3 control-label">Date & Time:</label>
+                                        <div class="input-group date form_datetime col-md-8" data-date="2014-12-02T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
+                                            <span id="dateFieldHolder"><input class="form-control" size="16" type="text" value="" readonly /></span>
+                                            <span id='remove_date' class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                            <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                        </div>
+                                        <input type="hidden" id="dtp_input1" value="" /><br/>
+
+                                    </div>
+                                </form>
+
+
+                                <span id="schedule_button_holder"><button class="btn btn-primary" type="button" <%if (appointment_info.message === "success") { %>style="visibility:hidden;"<% } %> id="appointment_btn">schedule</button><br/><br/></span>
+
+                                <!--<div id="successMode" style="display: none" class="alert alert-success" role="alert"><strong>Appointment Scheduled</strong> You successfully scheduled</div>-->
+                                <%if (appointment_info.message === "success" && appointment_info.info.status === "pending") { %><div id="pendingMode"  class="alert alert-info" role="alert">
+                                    <div id="delete_btn"  >x</div>
+
+                                    <strong>Appointment Pending </strong>Appointment <%=appointment_info.info.time %>
+                                     is being processed, and please come back and check
+                                </div><% } %>
+
+                                <%if (appointment_info.message === "success" && appointment_info.info.status === "success") { %><div id="successMode" class="alert alert-success" role="alert">
+
+                                    <strong>Appointment Scheduled </strong>Appointment <%=appointment_info.info.time %>
+                                    is successfully scheduled. See you soon!
+                                </div><% } %>
+
+                                <%if (appointment_info.message === "error") { %><div id="pendingMode" style="display:none" class="alert alert-info" role="alert"></div><% } %>
+                                <div id="errorMode"  style="display: none" class="alert alert-danger" role="alert"><strong>Error</strong> Scheduling fails, please try again!</div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="position: relative;">
+                        <h3 class="panel-title">Vehicle Reports</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div id="reportlist" class="list-group">
+                            <% for(var i = 0; i < report_info.length; i++) {%>
+                            <a href="#" class="list-group-item" data-address="<%= report_info[i].reporturl %>" data-content="<%= report_info[i].htmlcontent %>" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#myModal">
+                                <%= report_info[i].time %>
+                            </a>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width: 800px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div id="modal-body" class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+
+                <div style="float: left; margin-bottom: 30px;">Report Link: <a id="address"></a></div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="newCar" tabindex="-1" role="dialog" aria-labelledby="newCarLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="newCarLabel">New Report</h4>
+            </div>
+            <div class="modal-body">
+                This is new Car
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
+    <ul class="list-inline">
+        <li><a href="#">Terms of Service</a></li>
+        <li>|</li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li>|</li>
+        <li><a href="#">info.mmmdiagnostics@gmail.com</a></li>
+    </ul>
+
+    <p>
+        Copyright &copy; 2014 <a href="http://mmmdiagnostics.com/">Make Me Mobile Diagnostics</a>. All rights reserved.
+    </p>
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script>
+    // smooth scroll to anchors
+    $("a[href^='#']").on('click', function(e) {
+        e.preventDefault();
+        var hash = this.hash;
+        $('html, body').animate({
+            scrollTop: $(this.hash).offset().top
+        }, 300, function(){
+            //window.location.hash = hash; // don't change URL
+        });
+    });
+
+</script>
+<script>
+    $('body').scrollspy({ target: 'nav' });
+
+    $('nav').affix({
+        offset: {
+            top: $('#splash').height() + $('nav').height()
+    }
+    });
+</script>
+<script src="/javascripts/index.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/javascripts/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+
+<!--
+<script type="text/javascript" src="js/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
+-->
+<script type="text/javascript">
+    $('.form_datetime').datetimepicker({
+        //language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1
+    });
+    $('.form_date').datetimepicker({
+        language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0
+    });
+    $('.form_time').datetimepicker({
+        language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 1,
+        minView: 0,
+        maxView: 1,
+        forceParse: 0
+    });
+</script>
+<script>
+    // smooth scroll to anchors
+    $("a[href^='#']").on('click', function(e) {
+        e.preventDefault();
+        var hash = this.hash;
+        $('html, body').animate({
+            scrollTop: $(this.hash).offset().top
+        }, 300, function(){
+            //window.location.hash = hash; // don't change URL
+        });
+    });
+</script>
+<script>
+    $('body').scrollspy({ target: 'nav' });
+
+    $('nav').affix({
+        offset: {
+            top: $('#splash').height() + $('nav').height()
+    }
+    });
+
+
+</script>
+<script src="/javascripts/authenticatedIndex.js"></script>
+<style>
+    #additional_comment[readonly]{
+        background-color: white;
+    }
+    html, body{
+        padding:0;
+        margin:0;
+        height:100%;
+    }
+    #deletepart{
+        display:none;
+    }
+</style>
+</body>
+</html>

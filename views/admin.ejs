@@ -1,0 +1,181 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=480">
+
+    <title>Make Me Mobile Diagnostics</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+
+    <link rel="icon" type="image/png" href="http://taminder.net/img/favicon.png">
+
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+
+    <![endif]-->
+</head>
+<body >
+<nav class="navbar navbar-default" role="navigation" style="position: static;">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">
+                <img src="/images/logo.png" alt="Make Me Mobile Diagnostics">
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="active"><a href="login.html">Control Panel</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+<div id="page" style="min-height: 92%; position: relative; padding-bottom: 60px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">Assign Appointments</h2>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-bordered table-striped">
+                            <tbody id="tbody">
+                            <% for(var i = 0; i < appointmentset.length; i++ ){ %>
+                                <tr data-sign_up_email="<%= appointmentset[i].sign_up_email %>">
+                                    <td><%= appointmentset[i].sign_up_last_name %>, <%= appointmentset[i].sign_up_first_name %>&nbsp &nbsp<%= appointmentset[i].time %></td>
+                                    <td>
+                                        <select class="form-control">
+                                            <option>Schedule appointment to:</option>
+                                            <option>John Yuan</option>
+                                        </select>
+                                    </td>
+                                    <td class="schedule_btn" style="text-align: center;">
+                                        <button type="submit" class="btn btn-primary schedule">Schedule</button>
+                                    </td>
+                                </tr>
+                            <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <footer style="position:absolute;bottom:0;width:100%;">
+        <ul class="list-inline">
+            <li><a href="#">Terms of Service</a></li>
+            <li>|</li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li>|</li>
+            <li><a href="#">info.mmmdiagnostics@gmail.com</a></li>
+        </ul>
+
+        <p>
+            Copyright &copy; 2014 <a href="http://mmmdiagnostics.com/">Make Me Mobile Diagnostics</a>. All rights reserved.
+        </p>
+    </footer>
+</div>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script>
+    // smooth scroll to anchors
+    $("a[href^='#']").on('click', function(e) {
+        e.preventDefault();
+        var hash = this.hash;
+        $('html, body').animate({
+            scrollTop: $(this.hash).offset().top
+        }, 300, function(){
+            //window.location.hash = hash; // don't change URL
+        });
+    });
+</script>
+<script>
+    $('body').scrollspy({ target: 'nav' });
+
+    $('nav').affix({
+        offset: {
+            top: $('#splash').height() + $('nav').height()
+    }
+    });
+</script>
+<script src="/javascripts/admin.js"></script>
+<style>
+    html, body{
+        height:100%;
+        padding:0;
+        margin:0;
+    }
+</style>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    var socket = io();
+    socket.on('appointment request', function(appointment_info){
+        var tbody = document.getElementById('tbody');
+
+        var td1 = document.createElement('td');
+        td1.innerHTML = appointment_info.sign_up_last_name + ", " + appointment_info.sign_up_first_name + "&nbsp &nbsp"  + appointment_info.time;
+
+        var td2 = document.createElement('td');
+        var td2select = document.createElement('select');
+        td2select.className = "form-control";
+        var option1 = document.createElement('option');
+        option1.innerHTML = "Schedule appointment to:";
+        var option2 = document.createElement('option');
+        option2.innerHTML = "John Yuan";
+        td2select.appendChild(option1);
+        td2select.appendChild(option2);
+        td2.appendChild(td2select);
+
+        var td3 = document.createElement('td');
+        td3.style.textAlign = 'center';
+        var td3btn = document.createElement('button');
+        td3btn.setAttribute('type', 'submit');
+        td3btn.className = 'btn btn-primary schedule';
+        td3btn.innerHTML = "Schedule";
+        td3.appendChild(td3btn);
+
+        var tr = document.createElement('tr');
+        tr.setAttribute('data-sign_up_email', appointment_info.sign_up_email);
+        tbody.appendChild(tr);
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tr.appendChild(td3);
+        td3btn.addEventListener('click', function(){
+            var target = {};
+            var trow = this.parentElement.parentElement;
+            target['sign_up_email'] = trow.dataset.sign_up_email;
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/admin/proceed');
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.addEventListener('readystatechange', function(){
+                if(xhr.readyState === 4 && xhr.status === 200){
+                    document.getElementById('tbody').removeChild(trow);
+                }
+            });
+            xhr.send(JSON.stringify(target));
+        });
+
+    });
+
+</script>
+
+
+</body>
+</html>

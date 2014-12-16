@@ -1,0 +1,350 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=480">
+
+    <title>Make Me Mobile Diagnostics</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+
+    <link rel="icon" type="image/png" href="http://taminder.net/img/favicon.png">
+
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+<body>
+<nav class="navbar navbar-default" role="navigation" style="position: static;">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">
+                <img src="images/logo.png" alt="Make Me Mobile Diagnostics">
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <!--<li><a href="index.html">Home</a></li>
+                <li><a href="#appointment">Get Started</a></li>
+                <li><a href="#appointment">How it Works</a></li>-->
+                <li class="active"><a href="login.html">Control Panel</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+<div id="page">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">Generating Report</h2>
+                    </div>
+                    <div class="panel-body">
+                        <input type="hidden" name="count" value="1" />
+                        <div class="control-group" id="fields">
+                            <div class="controls" id="profs">
+                                <form id="generate_form" class="input-append">
+                                    <h3>Client: <span id="client_name"></span></h3><br><br>
+                                    <h3>OBD Codes</h3>
+                                    <div id="field">
+                                        <input autocomplete="off" class="inputcode" list='code' id="field1" name="prof1" type="text" placeholder="OBD Code">
+                                        <datalist id='code'>
+                                            <% for(var i=0; i < codeset.length; i++) { %>
+                                                <option value="<%= codeset[i].code %>">
+                                            <% } %>
+
+                                        </datalist>
+                                        <button id="b1" class="btn add-more" type="button">+</button>
+                                    </div>
+                                    <span id="odb2code" data-ddb2code="<%= JSON.stringify(codeset) %>"></span>
+                                    <span id="appointment" data-appointment="<%= JSON.stringify(appointmentset) %>"></span>
+                                    <div style="height: 50px;"></div>
+
+
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Make</label>
+                                        <div class="col-sm-10">
+                                            <input id="inputmake"  class="form-control" placeholder="make">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Model</label>
+                                        <div class="col-sm-10">
+                                            <input id="inputmodel"  class="form-control" placeholder="model">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Year</label>
+                                        <div class="col-sm-10">
+                                            <input id="inputyear"  class="form-control" placeholder="year">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Mileage</label>
+                                        <div class="col-sm-10">
+                                            <input id="inputmileage"  class="form-control" placeholder="mileage">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Color</label>
+                                        <div class="col-sm-10">
+                                            <input id="inputcolor"  class="form-control" placeholder="color">
+                                        </div>
+                                    </div>
+
+                                    <h3>Comments</h3>
+                                    <textarea id="commentinput" class="form-control" style="width: 100%;" rows="3"></textarea>
+                                    <button id="generate_btn" class="btn btn-primary">Preview Report</button>
+
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="reportarea"  style="background-color: white; padding : 15px; color:#8e8e8e; display: none;">
+                    <div><img src="images/logo.png" alt="Make Me Mobile Diagnostics" style="width:20%; height:20%; margin:20px; margin-bottom: 30px"></div>
+                    <span id="reportcontentplace">
+                    <form id="reportform" data-target="" class="form-horizontal" role="form">
+
+                    <div id="first-part" style="background-color: #f4f7f8; padding-left: 3%; padding-right: 10%; padding-top:20px; padding-bottom: 20px;">
+                        <div style="margin-left:20%; margin-right: 5%; font-size: 20px; margin-bottom: 20px; border-bottom: 2px solid #97bbc9;"><strong>Diagnostic Report</strong></div>
+                        <div class="form-group" style="margin:0; margin-bottom: 5px;">
+                            <label class="col-sm-2 control-label">Owner</label>
+                            <div class="col-sm-10">
+                                <div id="owner" style="background-color: #cadce3; border:none; margin:0; color: #838383;" class="form-control" ></div>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin:0;  margin-bottom: 5px;">
+                            <label class="col-sm-2 control-label">Machanic</label>
+                            <div class="col-sm-10">
+                                <div id="machanic" style="background-color: #adcdd9; border:none; margin:0; color: #838383;" class="form-control" >John Yuan</div>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin:0;  margin-bottom: 5px;">
+                            <label class="col-sm-2 control-label">Date</label>
+                            <div class="col-sm-10">
+                                <div id="date"  style="background-color: #cadce3; border:none; margin:0; color: #838383;" class="form-control" placeholder="date"></div>
+                            </div>
+                        </div>
+
+                         <div class="form-group" style="margin:0;  margin-bottom: 5px;">
+                             <label class="col-sm-2 control-label">Make</label>
+                             <div class="col-sm-10">
+                                 <div id="make"  style="background-color: #adcdd9; border:none; margin:0; color: #838383;" class="form-control" placeholder="make"></div>
+                             </div>
+                         </div>
+                         <div class="form-group" style="margin:0;  margin-bottom: 5px;">
+                             <label class="col-sm-2 control-label">Model</label>
+                             <div class="col-sm-10">
+                                 <div id="model" style="background-color: #cadce3; border:none; margin:0;color: #838383;" class="form-control" placeholder="model"></div>
+                             </div>
+                         </div>
+
+                         <div class="form-group" style="margin:0;  margin-bottom: 5px;">
+                             <label class="col-sm-2 control-label">Year</label>
+                             <div class="col-sm-10">
+                                 <div id="year" style="background-color: #adcdd9; border:none;margin:0;color: #838383;" class="form-control" placeholder="year"></div>
+                             </div>
+                         </div>
+
+                         <div class="form-group" style="margin:0;  margin-bottom: 5px;">
+                             <label class="col-sm-2 control-label">Mileage</label>
+                             <div class="col-sm-10">
+                                 <div id="mileage" style="background-color: #cadce3; border:none;margin:0;color: #838383;" class="form-control" placeholder="mileage"></div>
+                             </div>
+                         </div>
+
+                         <div class="form-group" style="margin:0;  margin-bottom: 5px;">
+                             <label class="col-sm-2 control-label">Color</label>
+                             <div class="col-sm-10">
+                                 <div id="color" style="background-color: #adcdd9; border:none;margin:0;color: #838383;" class="form-control" placeholder="color"></div>
+                             </div>
+                         </div>
+                    </div>
+                        <div id="second-part" style="margin-top: 8px;"><img src="/images/chart.jpg" style="width:100%;"></div>
+
+                        <div id="third-part" style="background-color: #fdf5eb;margin-top: 8px; padding:15px;">
+                            <table id="code_info" class="table" style="margin:0;">
+                                <thead>
+                                <tr>
+                                    <th style="border-color: #e7d0b2;">#</th>
+                                    <th style="border-color: #e7d0b2;">Code</th>
+                                    <th style="border-color: #e7d0b2;">Description</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Mark</td>
+                                    <td>Otto</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Jacob</td>
+                                    <td>Thornton</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Larry</td>
+                                    <td>the Bird</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="fourth-part" style="background-color: #e6f3f9; margin-top: 10px; padding:40px;">
+                        <h4><strong>Additional Comment: </strong></h4>
+                        <textarea id="additional_comment" class="form-control" style="width: 100%; resize: none;  border-color: #e6f3f9; border-top-color:#7b8c93; background-color: #e6f3f8; padding:20px; font-family: 'Helvetica Neue'; font-size:18px; color:#8e8e8e;" rows="6" readonly>Hello</textarea>
+                        </div>
+
+                        <div id="deletepart" class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10" style="margin-top: 10px;">
+                                <button id="send_report" type="submit" class="btn btn-primary" style="width:30%;">Send Report</button>
+                            </div>
+                        </div>
+                    </form>
+                    </span>
+                        <!--<div id="ower"><span>Vehicle Owner: </span>Tin Hon Ng</div>
+                        <div id="machanic"><span>Machanic: </span>John Yuan</div>
+
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Code</th>
+                                <th>Description</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Mark</td>
+                                <td>Otto</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Jacob</td>
+                                <td>Thornton</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Larry</td>
+                                <td>the Bird</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div id='commentarea' style="background-color: white;">
+                            <div>Additional Comment:</div>
+                            <div id="commentContent"></div>
+                        </div>-->
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Appointments</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div id='clientlist' class="list-group">
+                            <% for(var i = 0; i < appointmentset.length; i++) { %>
+                            <a id="<%= appointmentset[i].sign_up_email%>" data-client_email=<%= appointmentset[i].sign_up_email%> href="#" class="list-group-item" data-toggle="modal" data-target="#myModal">
+                                <%= appointmentset[i].sign_up_last_name%>, <%= appointmentset[i].sign_up_first_name%> &nbsp&nbsp<%= appointmentset[i].time%>
+                            </a>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
+    <ul class="list-inline">
+        <li><a href="#">Terms of Service</a></li>
+        <li>|</li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li>|</li>
+        <li><a href="#">info.mmmdiagnostics@gmail.com</a></li>
+    </ul>
+    <p>
+        Copyright &copy; 2014 <a href="http://mmmdiagnostics.com/">Make Me Mobile Diagnostics</a>. All rights reserved.
+    </p>
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script>
+    // smooth scroll to anchors
+    $("a[href^='#']").on('click', function(e) {
+        e.preventDefault();
+        var hash = this.hash;
+        $('html, body').animate({
+            scrollTop: $(this.hash).offset().top
+        }, 300, function(){
+            //window.location.hash = hash; // don't change URL
+        });
+    });
+</script>
+<script>
+    $('body').scrollspy({ target: 'nav' });
+
+    $('nav').affix({
+        offset: {
+            top: $('#splash').height() + $('nav').height()
+        }
+    });
+</script>
+<script>
+    $(document).ready(function(){
+        var next = 1;
+        $(".add-more").click(function(e){
+            e.preventDefault();
+            var addto = "#field" + next;
+            var addRemove = "#field" + (next);
+            next = next + 1;
+            var newIn = '<input list="code" autocomplete="off" class="inputcode" id="field' + next + '" name="field' + next + '" type="text" placeholder="OBD Code">';
+            var newInput = $(newIn);
+            var removeBtn = '<button id="remove' + (next - 1) + '" class="btn btn-danger remove-me" style="margin-left: 5px">-</button></div><div id="field">';
+            var removeButton = $(removeBtn);
+            $(addto).after(newInput);
+            $(addRemove).after(removeButton);
+            $("#field" + next).attr('data-source',$(addto).attr('data-source'));
+            $("#count").val(next);
+
+            $('.remove-me').click(function(e){
+                e.preventDefault();
+                var fieldNum = this.id.charAt(this.id.length-1);
+                var fieldID = "#field" + fieldNum;
+                $(this).remove();
+                $(fieldID).remove();
+            });
+        });
+    });
+</script>
+<script src="/javascripts/machanic.js"></script>
+<style>
+    #additional_comment[readonly]{
+        background-color: white;
+    }
+</style>
+
+
+
+</body>
+</html>

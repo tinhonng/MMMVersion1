@@ -1,0 +1,296 @@
+/**
+ * Make Me Mobile Diagnostics
+ *
+ * Author: Taminder Bariana
+ * Author URL: http://taminder.net/
+ */
+
+body {
+	background-color: #fff;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	font-weight: 400;
+	word-wrap: break-word;
+	font-size: 16px;
+	line-height: 1.6;
+	color: #333;
+	position: relative;
+}
+
+
+.btn-primary {
+	background-color: #3A89C9;
+	border-color: #3A89C9;
+}
+.btn-primary:hover {
+	background-color: #327CB8;
+	border-color: #327CB8;
+}
+.btn-success {
+	background-color: #F26C4F;
+	border-color: #F26C4F;
+}
+.btn-success:hover {
+	background-color: #F05A38;
+	border-color: #F05A38;
+}
+.form-control {
+	margin-bottom: 20px;
+}
+
+#pendingMode{
+    position: relative;
+}
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin-top: 0;
+	font-weight: 400;
+}
+.light-text {
+	font-weight: 200;
+}
+strong,
+.heavy-text {
+	font-weight: 600;
+}
+
+/**
+ * NAVIGATION
+ */
+.navbar {
+	margin-bottom: 0;
+	border-radius: 0;
+	padding: 20px 0;
+}
+.navbar-default {
+	background-color: #fff;
+	border-color: #fff;
+}
+.navbar-default .navbar-nav > li > a {
+	background-color: none;
+	color: #777;
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: 2px
+}
+.navbar-default .navbar-nav > li > a:hover {
+	color: #333;
+}
+.navbar-default .navbar-nav > li > button {
+	margin-left: 15px;
+}
+.navbar-default .navbar-nav > .active>a,
+.navbar-default .navbar-nav > .active>a:hover,
+.navbar-default .navbar-nav > .active>a:focus,
+#navbar-collapse-1 > ul > li.dropdown.open > a {
+	background-color: #fff;
+	color: #333;
+}
+.navbar-brand {
+	float: left;
+	height: 50px;
+	padding: 0px 15px;
+	font-size: 0;
+	line-height: 20px;
+}
+.navbar-brand img {
+	height: 50px;
+}
+.navbar-collapse {
+	border-top: none;
+	box-shadow: none;
+}
+@media (max-width: 767px) {
+	#navbar-collapse-1 {
+		margin: 20px 0 0 0;
+	}
+}
+.navbar-default .navbar-toggle {
+	border-color: #215D93;
+}
+.navbar-toggle {
+	background-color: #215D93;
+}
+.navbar-default .navbar-toggle .icon-bar {
+	background-color: #5784be;
+}
+
+/**
+ * CONTACT ME
+ */
+
+.modal-dialog {
+	margin: 100px auto;
+}
+.modal-content {
+	border-radius: 3px;
+	box-shadow: 3px 9px rgba(0,0,0,0.2);
+}
+
+
+/**
+ * PAGE
+ */
+#page {
+	background-color: #E9F2F9;
+	padding: 60px 0;
+}
+
+
+/**
+ * SPLASH
+ */
+#splash {
+	background-color: #E9F2F9;
+	padding: 80px 0 0 0;
+	text-align: center;
+}
+#splash h1 {
+	color: #1B325F;
+	text-align: center;
+}
+#splash h2 {
+	font-size: 30px;
+	color: #1B325F;
+	text-align: center;
+}
+#splash p.sub-heading {
+	font-size: 20px;
+	color: #1B325F;
+	text-align: center;
+	font-weight: 300;
+	margin-top: 10px;
+}
+#splash p.call-action {
+	margin: 50px 0 60px 0;
+}
+#splash p.call-action button {
+	font-weight: 300;
+	text-transform: uppercase;
+	padding: 15px 35px;
+}
+#splash .btn-success {
+	/*
+	background-color: #FAB438;
+	border-color: #FAB438;
+	*/
+	font-weight: 400;
+	background-color: #F26C4F;
+	border-color: #F26C4F;
+	color: #fff;
+}
+#splash .btn-success:hover {
+	/*
+	background-color: #F6E057;
+	border-color: #F6E057;
+	*/
+	background-color: #F05A38;
+	border-color: #F05A38;
+}
+#splash-video {
+	width: 60%;
+	margin: 0 auto;
+	background-color: #3A89C9;
+}
+#splash-video video {
+	width: 100% !important;
+	height: auto !important;
+	margin-bottom: -7px;
+}
+
+/**
+ * WHITE ROW
+ */
+.white-row {
+ 	padding: 60px 0;
+ 	background-color: #fff;
+}
+.white-row h2 {
+ 	text-align: center;
+ 	margin-bottom: 10px;
+}
+.white-row > div.container > .row > div {
+	margin-top: 50px;
+}
+
+/**
+ * GREY ROW
+ */
+.grey-row {
+ 	padding: 60px 0;
+ 	background-color: #eee;
+}
+.grey-row h2 {
+	text-align: center;
+	margin-bottom: 10px;
+}
+.grey-row > div.container > .row > div {
+	margin-top: 50px;
+}
+
+/**
+ * BLUE ROW
+ */
+.blue-row {
+ 	padding: 60px 0;
+ 	background-color: #3A89C9;
+ 	color: #fff;
+}
+.blue-row h2 {
+ 	text-align: center;
+ 	margin-bottom: 10px;
+}
+.blue-row > div.container > .row > div {
+	margin-top: 50px;
+}
+
+/**
+ * FOOTER
+ */
+footer {
+	background-color: #24314B;
+	padding: 60px 0;
+	text-align: center;
+}
+footer,
+footer a {
+	color: #ccc;
+	font-size: 13px;
+}
+footer li {
+	text-transform: uppercase;
+}
+
+footer a:hover {
+	color: #fff;
+	text-decoration: none;
+}
+
+.error{
+    background-color: rgb(237, 250, 102);
+    border-radius: 5px;
+    font-size:12px;
+    color: rgb(251, 42, 45);
+}
+
+#sign_up_form_area > ul{
+    padding: 10px;
+}
+
+#field input{
+    width: 60%;
+}
+#delete_btn{
+    position: absolute; top: 0; right:0; background-color: #c2dceb; width:20px; height:20px border-radius:10px;text-align: center;
+}
+#delete_btn:hover{
+    cursor: pointer;
+}
+
+
